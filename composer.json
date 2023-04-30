@@ -1,0 +1,12 @@
+{
+    "require": {
+        "elasticsearch/elasticsearch": "^8.7",
+        "slim/slim": "^4.11",
+        "nyholm/psr7": "^1.7"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
