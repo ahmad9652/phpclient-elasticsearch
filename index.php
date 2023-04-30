@@ -5,25 +5,23 @@
 //  use Elasticsearch\ClientBuilder;
 
  $client = ClientBuilder::create()
-    ->setHosts(['https://sma-elasticsearch.kb.asia-south1.gcp.elastic-cloud.com:9243'])
-    ->setBasicAuthentication('elastic', 'TYjFSKpX2E4MuOgmejxlGs9i')
+    ->setHosts(['https://localhost:9200'])
+    ->setBasicAuthentication('elastic', 'Ela@9652')
     // ->setCABundle('./security/')
     ->build();
 
  
-// $result = $client->info();
-// //echo $result;
-// die("end");
- // Connect to MySQL database
-//  $servername = "localhost";
-//  $username = "mz1xs9r5lanjhi9gpzqb";
-//  $password = "pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI";
-//  $dbname = "sjmc-dev";
-//  $conn = new mysqli($servername, $username, $password, $dbname);
 
-$conn = mysqli_init();
-$conn->ssl_set(NULL, NULL, "/etc/ssl/certs/ca-certificates.crt", NULL, NULL);
-$conn->real_connect($_ENV["aws.connect.psdb.cloud"], $_ENV["mz1xs9r5lanjhi9gpzqb"], $_ENV["pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI"], $_ENV["sjmc"]);
+ // Connect to MySQL database
+ $servername = "localhost";
+ $username = "root";
+ $password = "";
+ $dbname = "sjmc-dev";
+ $conn = new mysqli($servername, $username, $password, $dbname);
+
+// $conn = mysqli_init();
+// $conn->ssl_set(NULL, NULL, "/etc/ssl/certs/ca-certificates.crt", NULL, NULL);
+// $conn->real_connect($_ENV["aws.connect.psdb.cloud"], $_ENV["mz1xs9r5lanjhi9gpzqb"], $_ENV["pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI"], $_ENV["sjmc"]);
  //var_dump($conn);
  
  // Check connection
