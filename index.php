@@ -15,11 +15,15 @@
 // //echo $result;
 // die("end");
  // Connect to MySQL database
- $servername = "localhost";
- $username = "root";
- $password = "ahmad";
- $dbname = "sjmc-dev";
- $conn = new mysqli($servername, $username, $password, $dbname);
+//  $servername = "localhost";
+//  $username = "mz1xs9r5lanjhi9gpzqb";
+//  $password = "pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI";
+//  $dbname = "sjmc-dev";
+//  $conn = new mysqli($servername, $username, $password, $dbname);
+
+$conn = mysqli_init();
+$conn->ssl_set(NULL, NULL, "/etc/ssl/certs/ca-certificates.crt", NULL, NULL);
+$conn->real_connect($_ENV["aws.connect.psdb.cloud"], $_ENV["mz1xs9r5lanjhi9gpzqb"], $_ENV["pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI"], $_ENV["sjmc"]);
  //var_dump($conn);
  
  // Check connection
