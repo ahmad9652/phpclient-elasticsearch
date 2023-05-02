@@ -1,78 +1,17 @@
 <?php
     error_reporting(E_ERROR | E_PARSE);
- require 'C:\xampp8.0.25\htdocs\phpelasticsearch\vendor\autoload.php';
- use Elastic\Elasticsearch\ClientBuilder;
-//  use Elasticsearch\ClientBuilder;
-
- $client = ClientBuilder::create()
-    ->setHosts(['https://localhost:9200'])
-    ->setBasicAuthentication('elastic', 'Ela@9652')
-    // ->setCABundle('./security/')
-    ->build();
-
- 
-
- // Connect to MySQL database
- $servername = "localhost";
- $username = "root";
- $password = "";
- $dbname = "sjmc-dev";
- $conn = new mysqli($servername, $username, $password, $dbname);
-
-// $conn = mysqli_init();
-// $conn->ssl_set(NULL, NULL, "/etc/ssl/certs/ca-certificates.crt", NULL, NULL);
-// $conn->real_connect($_ENV["aws.connect.psdb.cloud"], $_ENV["mz1xs9r5lanjhi9gpzqb"], $_ENV["pscale_pw_WLc7fLoQS70vZGaycxOzJjwMwEf2CLhLlBswQy46uuI"], $_ENV["sjmc"]);
- //var_dump($conn);
- 
- // Check connection
- if ($conn->connect_error) {
-     die("Connection failed: " . $conn->connect_error);
-    }
+    require 'C:\xampp8.0.25\htdocs\phpelasticsearch\vendor\autoload.php';
+    use Elastic\Elasticsearch\ClientBuilder;
+    //  use Elasticsearch\ClientBuilder;
     
-    // Query data from MySQL table
-    // $sql = "SELECT drug_id, name, drug_category FROM drugs";
-    $sql = "SELECT drugs.drug_id, drugs.name, drug_details.key_benifits,drug_details.key_ingredients,drug_details.product_info FROM drugs JOIN drug_details ON drugs.drug_id = drug_details.drug_id";
-
-    $result = $conn->query($sql);
+    $client = ClientBuilder::create()
+       ->setHosts(['https://localhost:9200'])
+       ->setBasicAuthentication('elastic', 'Ela@9652')
+       // ->setCABundle('./security/')
+       ->build();
     
-    if ($result->num_rows > 0) {
-        // Build Elasticsearch bulk index request body
-        $params = [
-            'index' => 'my_index',
-            'body' => []
-        ];
-
-    while($row = $result->fetch_assoc()) {
-        $params['body'][] = [
-            'index' => [
-                '_index' => 'my_index',
-                '_id' => $row['drug_id']
-            ]
-        ];
-        $params['body'][] = [
-            'drug_id' => $row['drug_id'], 
-            'name' => $row['name'],
-            'key_benifits' => $row['key_benifits'],
-            'key_ingredients' => $row['key_ingredients'],
-            'product_info' => $row['product_info']
-        ];
-    } 
-    // //print_r($params);
-    // Create Elasticsearch index
-    $response = $client->bulk($params);
-    // die("End");
-
-    // Process index creation response
-    if ($response['errors']) {
-        // Index creation failed
-        echo 'Index creation failed: ' . json_encode($response);
-    } else {
-        // Index creation successful
-        // echo 'Index creation successful';
-    }
-} else {
-    echo "0 results";
-}
+    
+    
 $search = '';
 $numHits = 0;
 //var_dump($_SERVER['REQUEST_METHOD']);
@@ -106,8 +45,6 @@ $numHits = $response['hits']['total']['value'];
     //     print_r($hit);
     // }
 }
-// Close MySQL connection
-$conn->close();
 
 
 
@@ -133,11 +70,14 @@ $conn->close();
         <div class="w-100 mx-auto my-2">
             <form action="index.php" method="post">
                 <div class="row my-3 mx-auto">
-                    <div class=col-md-10>
+                    <div class=col-md-8>
                         <input type="text" name="search" id="search-box" placeholder="Search" <?php echo 'value="'.$search.'"'?> class="form-control col-7">
                     </div>
                     <div class="col-md-2">
                         <button type="submit" class="btn btn-outline-success px-5">Search</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="elastic-indexing.php" class="btn btn-outline-success px-5">Refresh DB</a>
                     </div>
                 </div>
             </form>
@@ -154,6 +94,7 @@ $conn->close();
                     <th scope="col">Key Ingredients</th>
                     <th scope="col">Key Benifit</th>
                     <th scope="col">Product Info</th>
+                    <th scope="col">Tags</th>
                 </thead>
                 <?php
                 foreach ($response['hits']['hits'] as $hit) {
@@ -168,6 +109,7 @@ $conn->close();
                             <td>'.$hit["_source"]["key_ingredients"].'</td>
                             <td>'.$hit["_source"]["key_benifits"].'</td>
                             <td>'.$hit["_source"]["product_info"].'</td>
+                            <td>'.$hit["_source"]["tags"].'</td>
                         </tr>
                         
                     </tbody> ';
